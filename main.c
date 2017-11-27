@@ -67,7 +67,7 @@ int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
         break;
     default: {
         fprintf(printFile, "No such command: ");
-        fprintf(printFile, command);
+        fprintf(printFile, "%s", command);
         fprintf(printFile, "\n");
         break;
     }
