@@ -51,8 +51,18 @@ sortedcontainer* sortedcontainer_new() {
 void sortedcontainer_insert(sortedcontainer* sc, data* data) {
     node* n = node_new(data);
     // Implement this
-    (void)sc;
-    (void)n;
+    node* n_compare = sc->root;
+    while(n_compare != NULL) {
+        int cmp = data_compare(n_compare->data, data) ;
+        if (cmp == 0) return;
+        if (cmp < 0) {
+            n_compare = n_compare->left;
+        } else {
+            n_compare = n_compare->right;
+        }
+    }
+    n_compare = n;
+    
 }
 
 int sortedcontainer_erase(sortedcontainer* sc, data* data) {
