@@ -42,7 +42,7 @@ data* read_data(char const* command) {
  *
  * TO FIX:
  *   There are three problems in this function, two of which are related
- *       -   fprintf(printFile, command) => fprintf(printFile, "%s", command)
+ *       - fprintf(printFile, command) => fprintf(printFile, "%s", command)
  *       -  
  *       - 
  */

@@ -30,14 +30,16 @@ void data_delete(data* d) {
 }
 
 node* node_new(data* d) {
-    // Implement this
-    (void)d;
-    return NULL;
+    // Implement this (done?)
+    node* n = (node*)malloc(sizeof(node));
+    n->data = d;
+    return n;
 }
 
 void node_delete(node* n) {
-    // Implement this
-    (void)n;
+    // Implement this (done?)
+    free(n->data);
+    free(n);
 }
 
 sortedcontainer* sortedcontainer_new() {
