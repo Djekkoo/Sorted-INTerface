@@ -23,6 +23,8 @@ void print_prompt(FILE* f) {
  *
  * TO FIX:
  *   There are two serious problems in this function that are related
+ *      - 
+ *      - 
  */
 data* read_data(char const* command) {
     int age;
@@ -40,6 +42,9 @@ data* read_data(char const* command) {
  *
  * TO FIX:
  *   There are three problems in this function, two of which are related
+ *       -   fprintf(printFile, command) => fprintf(printFile, "%s", command)
+ *       -  
+ *       - 
  */
 int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
     switch(*command) {
@@ -83,6 +88,8 @@ int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
  * TO FIX:
  *   There are two separate problems in this function. Fix these problems
  *   by only changing TWO lines in total.
+ *      -   
+ *      -   
  */
 char* read_command(FILE* in) {
     int inputMaxLength = 0;
@@ -117,6 +124,7 @@ char* read_command(FILE* in) {
  *
  * TO FIX:
  *   One issue needs to be fixed here.
+ *      -   
  */
 int main(int argc, char* argv[]) {
     (void)argc;
