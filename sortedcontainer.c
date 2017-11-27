@@ -38,7 +38,7 @@ node* node_new(data* d) {
 
 void node_delete(node* n) {
     // Implement this (done?)
-    free(n->data);
+    data_delete(n->data);
     free(n);
 }
 
@@ -51,17 +51,17 @@ sortedcontainer* sortedcontainer_new() {
 void sortedcontainer_insert(sortedcontainer* sc, data* data) {
     node* n = node_new(data);
     // Implement this
-    node* n_compare = sc->root;
-    while(n_compare != NULL) {
-        int cmp = data_compare(n_compare->data, data) ;
+    node** n_compare = &sc->root;
+    while(*n_compare != NULL) {
+        int cmp = data_compare((*n_compare)->data, data) ;
         if (cmp == 0) return;
-        if (cmp < 0) {
-            n_compare = n_compare->left;
+        if (cmp > 0) {
+            n_compare = &(*n_compare)->left;
         } else {
-            n_compare = n_compare->right;
+            n_compare = &(*n_compare)->right;
         }
     }
-    n_compare = n;
+    *n_compare = n;
     
 }
 
@@ -72,12 +72,26 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
     return 0;
 }
 
+
 int sortedcontainer_contains(sortedcontainer* sc, data* data) {
     // Implement this
-    (void)sc;
-    (void)data;
-    return 0;
+    return sc->root != NULL && node_contains(&sc->root, data) != NULL;
 }
+
+node** node_contains(node** n, data* data) {
+    int cmp = data_compare((*n)->data, data);
+    if (cmp == 0) {
+        return n;
+    }
+    else if (cmp > 0 && (*n)->left != NULL) {
+        return node_contains(&(*n)->left, data);
+    }
+    else if (cmp < 0 && (*n)->right != NULL) {
+        return node_contains(&(*n)->right, data);
+    }
+    return NULL;
+}
+
 
 // Do not change
 static void node_printtree(node* n, int level, FILE* printFile) {

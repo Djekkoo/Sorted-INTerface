@@ -81,6 +81,8 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data);
  */
 int sortedcontainer_contains(sortedcontainer* sc, data* data);
 
+node** node_contains(node** n, data* data);
+
 /**
  * @brief Prints the elements in the sortedcontainer
  * @param sc The sortedcontainer to print
