@@ -81,7 +81,7 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data);
  */
 int sortedcontainer_contains(sortedcontainer* sc, data* data);
 
-node** node_contains(node** n, data* data);
+node** find_parent(node** n, data* data);
 
 /**
  * @brief Prints the elements in the sortedcontainer

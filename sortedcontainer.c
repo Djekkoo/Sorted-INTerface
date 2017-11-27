@@ -75,19 +75,23 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
 
 int sortedcontainer_contains(sortedcontainer* sc, data* data) {
     // Implement this
-    return sc->root != NULL && node_contains(&sc->root, data) != NULL;
+    return sc->root != NULL && find_parent(&sc->root, data) != NULL;
 }
 
-node** node_contains(node** n, data* data) {
-    int cmp = data_compare((*n)->data, data);
-    if (cmp == 0) {
+node** find_parent(node** n, data* data) {
+
+    if (((*n)->left != NULL && data_compare((*n)->left->data, data) == 0) || ((*n)->right != NULL && data_compare((*n)->right->data, data) == 0)) {
         return n;
     }
-    else if (cmp > 0 && (*n)->left != NULL) {
-        return node_contains(&(*n)->left, data);
+    int cmp = data_compare((*n)->data, data);
+    // if (cmp == 0) {
+    //     return n;
+    // }
+    if (cmp > 0 && (*n)->left != NULL) {
+        return find_parent(&(*n)->left, data);
     }
     else if (cmp < 0 && (*n)->right != NULL) {
-        return node_contains(&(*n)->right, data);
+        return find_parent(&(*n)->right, data);
     }
     return NULL;
 }
