@@ -8,12 +8,17 @@
 // DO NOT change this value. It does not fix your problems
 #define INPUT_INCREMENT 10
 
+#define STR(X) STR2(X)
+#define STR2(X) #X
+
 /**
  * @brief Prints the prompt to @c f
  * @param f The FILE to print the prompt to.
  */
-void print_prompt(FILE* f) {
-    fprintf(f, "\n> "); fflush(f);
+void print_prompt(FILE *f)
+{
+    fprintf(f, "\n> ");
+    fflush(f);
 }
 
 /**
@@ -23,13 +28,31 @@ void print_prompt(FILE* f) {
  *
  * TO FIX:
  *   There are two serious problems in this function that are related
- *      - 
- *      - 
+ *      - 0 or 1 arugments can be given
+ *      - Name can be empty or infinite
  */
-data* read_data(char const* command) {
+data *read_data(char const *command)
+{
     int age;
     char name[NAME_LENGTH];
-    sscanf(command, "%*s %i %s", &age, name);
+    // Check parameter length
+    if (sscanf(command, "%*s %i %" STR(NAME_LENGTH) "s", &age, name) != 2)
+    {
+        fprintf(stdout, "Not enough arguments");
+        return NULL;
+    }
+    else
+    {
+        // Check if argument is not '\0'.
+        // if (name[0] == '\0')
+        // {
+        //     fprintf(stdout, "Name cannot be empty");
+        //     return NULL;
+        // }
+
+        // Null terminate last bit
+        name[NAME_LENGTH - 1] = '\0';
+    }
     return data_new(age, name);
 }
 
@@ -46,21 +69,47 @@ data* read_data(char const* command) {
  *       -  
  *       - 
  */
-int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
-    switch(*command) {
+int handle_command(FILE *printFile, sortedcontainer *sc, char *command)
+{
+    switch (*command)
+    {
     case 'i':
-        sortedcontainer_insert(sc, read_data(command));
-        break;
-    case 'e':
-        sortedcontainer_erase(sc, read_data(command));
-        break;
-    case 'c':
-        if(sortedcontainer_contains(sc, read_data(command))) {
-            fprintf(printFile, "y\n");
-        } else {
-            fprintf(printFile, "n\n");
+    {
+        data *rd = read_data(command);
+        if (rd != NULL)
+        {
+            sortedcontainer_insert(sc, rd);
         }
         break;
+    }
+
+    case 'e':
+    {
+        data *rd = read_data(command);
+        if (rd != NULL)
+        {
+            sortedcontainer_erase(sc, rd);
+        }
+        break;
+    }
+
+    case 'c':
+    {
+        data *rd = read_data(command);
+        if (rd != NULL)
+        {
+            if (sortedcontainer_contains(sc, rd))
+            {
+                fprintf(printFile, "y\n");
+            }
+            else
+            {
+                fprintf(printFile, "n\n");
+            }
+        }
+
+        break;
+    }
     case 'p':
         sortedcontainer_print(sc, printFile);
         break;
@@ -70,7 +119,8 @@ int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
     case 't':
         test(printFile);
         break;
-    default: {
+    default:
+    {
         fprintf(printFile, "No such command: ");
         fprintf(printFile, "%s", command);
         fprintf(printFile, "\n");
@@ -91,28 +141,32 @@ int handle_command(FILE* printFile, sortedcontainer* sc, char* command) {
  *      -   
  *      -   
  */
-char* read_command(FILE* in) {
+char *read_command(FILE *in)
+{
     int inputMaxLength = 0;
-    char* input = NULL;
-    char* inputAt = NULL;
+    char *input = NULL;
+    char *inputAt = NULL;
 
     int incr = INPUT_INCREMENT;
 
     inputMaxLength = incr;
-    input = (char*)malloc(sizeof(char) * incr);
+    input = (char *)malloc(sizeof(char) * incr);
     inputAt = input;
-    do {
+    do
+    {
         inputAt[incr - 1] = 'e';
-        if(fgets(inputAt, incr, in) == NULL) return NULL;
-        if(inputAt[incr - 1] != '\0' || inputAt[incr - 2] == '\n') {
+        if (fgets(inputAt, incr, in) == NULL)
+            return NULL;
+        if (inputAt[incr - 1] != '\0' || inputAt[incr - 2] == '\n')
+        {
             break;
         }
         inputMaxLength += INPUT_INCREMENT;
         input = realloc(input, sizeof(char) * inputMaxLength);
         inputAt += incr - 1;
         incr = INPUT_INCREMENT + 1;
-    } while(1);
-    input[strlen(input)-1] = 0;
+    } while (1);
+    input[strlen(input) - 1] = 0;
     return input;
 }
 
@@ -126,21 +180,25 @@ char* read_command(FILE* in) {
  *   One issue needs to be fixed here.
  *      -   
  */
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
     (void)argc;
     (void)argv;
 
-    sortedcontainer* sc = sortedcontainer_new();
+    sortedcontainer *sc = sortedcontainer_new();
 
-    while(1) {
+    while (1)
+    {
         print_prompt(stdout);
 
-        char* command = read_command(stdin);
-        if(command == NULL) {
+        char *command = read_command(stdin);
+        if (command == NULL)
+        {
             break;
         }
 
-        if(handle_command(stdout, sc, command)) {
+        if (handle_command(stdout, sc, command))
+        {
             break;
         }
     }
@@ -151,4 +209,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
