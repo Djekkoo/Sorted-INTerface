@@ -49,7 +49,6 @@ sortedcontainer* sortedcontainer_new() {
 }
 
 void sortedcontainer_insert(sortedcontainer* sc, data* data) {
-    node* n = node_new(data);
     // Implement this
     node** n_compare = &sc->root;
     while(*n_compare != NULL) {
@@ -61,8 +60,8 @@ void sortedcontainer_insert(sortedcontainer* sc, data* data) {
             n_compare = &(*n_compare)->right;
         }
     }
+    node* n = node_new(data);
     *n_compare = n;
-    
 }
 
 int sortedcontainer_erase(sortedcontainer* sc, data* data) {
@@ -121,7 +120,7 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
         // Case 2: One child
         else {
 
-            sortedcontainer_print(sc, stdout);
+            // sortedcontainer_print(sc, stdout);
             if (target_node->left != NULL) {
                 *target_pointer = target_node->left;
             } else {
@@ -130,7 +129,7 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
             
             node_delete(target_node);
 
-    sortedcontainer_print(sc, stdout);
+    // sortedcontainer_print(sc, stdout);
             result = 1;
         }
     } else {
@@ -150,7 +149,7 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
 
 int sortedcontainer_contains(sortedcontainer* sc, data* data) {
     // Implement this
-    return sc->root != NULL && find_parent(&sc->root, data) != NULL;
+    return sc->root != NULL && (data_compare(sc->root->data, data) == 0 || find_parent(&sc->root, data) != NULL);
 }
 
 node** find_parent(node** n, data* data) {
