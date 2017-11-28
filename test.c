@@ -122,7 +122,46 @@ int test4(FILE* printFile) {
 
     // Add a test in the style of test3 to test the deletion of a node with
     // two children
-    ASSERT(0, "implement this test");
+
+    sortedcontainer* sc = sortedcontainer_new();
+
+    data* aap = data_new(10, "aap");
+    data* noot = data_new(20, "noot");
+    data* mies = data_new(5, "mies");
+
+    sortedcontainer_insert(sc, aap);
+    sortedcontainer_insert(sc, noot);
+    sortedcontainer_insert(sc, mies);
+
+    ASSERT(sc != NULL, "failed to create sorted container");
+    ASSERT(sc->root != NULL, "root is NULL");
+    ASSERT(sc->root->data != NULL, "root->data is NULL");
+
+    ASSERT(!data_compare(aap, sc->root->data), "data is not equivalent");
+    ASSERT(aap == sc->root->data, "data is not the same instant");
+
+    ASSERT(!data_compare(noot, sc->root->right->data), "data is not equivalent");
+    ASSERT(noot == sc->root->right->data, "data is not the same instant");
+
+    ASSERT(!data_compare(mies, sc->root->left->data), "data is not equivalent");
+    ASSERT(mies == sc->root->left->data, "data is not the same instant");
+
+    sortedcontainer_erase(sc, aap);
+    // sortedcontainer_print(sc, stdout);
+
+    ASSERT(!data_compare(noot, sc->root->data), "data is not equivalent");
+    ASSERT(noot == sc->root->data, "data is not the same instant");
+
+    ASSERT(!data_compare(mies, sc->root->left->data), "data is not deleted");
+    ASSERT(mies == sc->root->left->data, "data is not deleted");
+
+    ASSERT(sc->root->left->left == NULL, "left child of mies' node is not NULL");
+    ASSERT(sc->root->left->right == NULL, "right child of mies' node is not NULL");
+
+    ASSERT(sortedcontainer_contains(sc, noot), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, mies), "data is not in the container anymore (sortedcontainer_contains)");
+
+    sortedcontainer_delete(sc);
 
     return 0;
 }
@@ -145,6 +184,7 @@ void test(FILE* printFile) {
     fprintf(printFile, "Testing...\n");
     int max = sizeof(tests)/sizeof(*tests);
     int lmax = 1 + log10(max);
+    // tests[3](printFile); // <- test4 invokation before segmentation-fault
     for(int i = 0; i < max; ++i) {
         int r = tests[i](printFile);
         fprintf(printFile, "[%*i/%i] ", lmax, i+1, max);
