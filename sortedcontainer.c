@@ -66,11 +66,86 @@ void sortedcontainer_insert(sortedcontainer* sc, data* data) {
 }
 
 int sortedcontainer_erase(sortedcontainer* sc, data* data) {
-    // Implement this
-    (void)sc;
-    (void)data;
-    return 0;
+    if (sc->root == NULL) {
+        return 0;
+    }
+
+    int result;
+    node* aux_root = node_new(data_new(0, "asdflajsdflkjasdlfja393940293fdlsjkvnaldkjfa"));
+    if (data_compare(sc->root->data, aux_root->data) > 0) {
+        aux_root->right = sc->root;        
+    } else {         
+        aux_root->left = sc->root;
+    }
+    sc->root = aux_root;
+
+    node** parent_pointer = find_parent(&aux_root, data);
+    printf("%p", (void*)parent_pointer);
+    if (parent_pointer != NULL) {
+        node* parent_node = *parent_pointer;
+        node** target_pointer;
+        node* target_node;
+
+        // Get target node
+        if (parent_node->left != NULL && data_compare(parent_node->left->data, data) == 0) {
+            target_node = parent_node->left;
+            target_pointer = &parent_node->left;
+        } else {
+            target_node = parent_node->right;
+            target_pointer = &parent_node->right;
+        }
+        
+        // Case 1: no children
+        
+        if (target_node->left == NULL && target_node->right == NULL) {
+            node_delete(target_node);
+            *target_pointer = NULL;
+            result = 1;
+        }
+        // Case 3: Two children
+        else if (target_node->left != NULL && target_node->right != NULL) {
+            node* lmc = target_node->right;
+            node** target_replace = &target_node->right;
+            while (lmc->left != NULL) {
+                target_replace = &lmc->left;
+                lmc = lmc->left;
+            }
+            data_delete(target_node->data);
+            target_node->data = data_new(lmc->data->age, lmc->data->name);
+            // if (lmc->right != NULL) {
+                *target_replace = lmc->right;
+            // }
+            node_delete(lmc);
+            result = 1;
+        }
+        // Case 2: One child
+        else {
+
+            sortedcontainer_print(sc, stdout);
+            if (target_node->left != NULL) {
+                *target_pointer = target_node->left;
+            } else {
+                *target_pointer = target_node->right;
+            }
+            
+            node_delete(target_node);
+
+    sortedcontainer_print(sc, stdout);
+            result = 1;
+        }
+    } else {
+        result = 0;
+    }
+     
+    if(aux_root->left != NULL) {
+        sc->root = aux_root->left;
+    } else {
+        sc->root = aux_root->right;
+    }
+    node_delete(aux_root);
+    return result;
 }
+
 
 
 int sortedcontainer_contains(sortedcontainer* sc, data* data) {
@@ -87,7 +162,7 @@ node** find_parent(node** n, data* data) {
     // if (cmp == 0) {
     //     return n;
     // }
-    if (cmp > 0 && (*n)->left != NULL) {
+    if (cmp > 0 &&(*n)->left != NULL) {
         return find_parent(&(*n)->left, data);
     }
     else if (cmp < 0 && (*n)->right != NULL) {
