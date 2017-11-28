@@ -38,6 +38,7 @@ int test2(FILE* printFile) {
 
     data* dat = data_new(10, "aap");
     sortedcontainer_insert(sc, dat);
+    sortedcontainer_print(sc, stdout);
 
     ASSERT(sc->root != NULL, "root is NULL");
     ASSERT(sc->root->data != NULL, "root->data is NULL");
@@ -171,7 +172,67 @@ int test5(FILE* printFile) {
 
     // Add a test in the style of test3 to test the deletion of a node with
     // two children, who each have two children as well
-    ASSERT(0, "implement this test");
+    
+    sortedcontainer* sc = sortedcontainer_new();
+
+    data* aap = data_new(10, "aap");
+    data* noot = data_new(20, "noot");
+    data* noot_l = data_new(15, "noot_left");
+    data* noot_r = data_new(25, "noot_right");
+    data* mies = data_new(5, "mies");
+    data* mies_l = data_new(0, "mies_left");
+    data* mies_r = data_new(7, "mies_right");
+
+    sortedcontainer_insert(sc, aap);
+    sortedcontainer_insert(sc, noot);
+    sortedcontainer_insert(sc, noot_l);
+    sortedcontainer_insert(sc, noot_r);
+    sortedcontainer_insert(sc, mies);
+    sortedcontainer_insert(sc, mies_l);
+    sortedcontainer_insert(sc, mies_r);
+    sortedcontainer_print(sc, stdout);
+
+    ASSERT(sc != NULL, "failed to create sorted container");
+    ASSERT(sc->root != NULL, "root is NULL");
+    ASSERT(sc->root->data != NULL, "root->data is NULL");
+
+    ASSERT(!data_compare(aap, sc->root->data), "data is not equivalent");
+    ASSERT(aap == sc->root->data, "data is not the same instant");
+
+    ASSERT(!data_compare(noot, sc->root->right->data), "data is not equivalent");
+    ASSERT(noot == sc->root->right->data, "data is not the same instant");
+
+    ASSERT(!data_compare(mies, sc->root->left->data), "data is not equivalent");
+    ASSERT(mies == sc->root->left->data, "data is not the same instant");
+
+    sortedcontainer_erase(sc, aap);
+    sortedcontainer_print(sc, stdout);
+
+    ASSERT(!data_compare(noot_l, sc->root->data), "data is not equivalent");
+    ASSERT(noot_l == sc->root->data, "data is not the same instant");
+
+    ASSERT(!data_compare(mies, sc->root->left->data), "data is not deleted");
+    ASSERT(mies == sc->root->left->data, "data is not deleted");
+
+    ASSERT(!data_compare(mies_l, sc->root->left->left->data), "left child of mies' node is not mies_left");
+    ASSERT(mies_l == sc->root->left->left->data, "data is not the same instant");
+    ASSERT(!data_compare(mies_r, sc->root->left->right->data), "right child of mies' node is not mies_right");
+    ASSERT(mies_r == sc->root->left->right->data, "data is not the same instant");
+    ASSERT(!data_compare(noot, sc->root->right->data), "Right child of root is not noot");
+    ASSERT(noot == sc->root->right->data, "data is not the same instant");
+    ASSERT(!data_compare(noot_r, sc->root->right->right->data), "Right child of noot is not noot_right");
+    ASSERT(noot_r == sc->root->right->right->data, "data is not the same instant");
+
+    ASSERT(sortedcontainer_contains(sc, noot), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, noot_l), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, noot_r), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, mies), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, mies_r), "data is not in the container anymore (sortedcontainer_contains)");
+    ASSERT(sortedcontainer_contains(sc, mies_l), "data is not in the container anymore (sortedcontainer_contains)");
+
+    sortedcontainer_delete(sc);
+
+    printf("%s", "done test5");
 
     return 0;
 }
@@ -184,7 +245,7 @@ void test(FILE* printFile) {
     fprintf(printFile, "Testing...\n");
     int max = sizeof(tests)/sizeof(*tests);
     int lmax = 1 + log10(max);
-    // tests[3](printFile); // <- test4 invokation before segmentation-fault
+    // tests[4](printFile); // <- test5 invokation before segmentation-fault
     for(int i = 0; i < max; ++i) {
         int r = tests[i](printFile);
         fprintf(printFile, "[%*i/%i] ", lmax, i+1, max);
