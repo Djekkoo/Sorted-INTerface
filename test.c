@@ -38,7 +38,6 @@ int test2(FILE* printFile) {
 
     data* dat = data_new(10, "aap");
     sortedcontainer_insert(sc, dat);
-    sortedcontainer_print(sc, stdout);
 
     ASSERT(sc->root != NULL, "root is NULL");
     ASSERT(sc->root->data != NULL, "root->data is NULL");
