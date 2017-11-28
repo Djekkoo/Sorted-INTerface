@@ -109,12 +109,16 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
                 target_replace = &lmc->left;
                 lmc = lmc->left;
             }
-            data_delete(target_node->data);
-            target_node->data = data_new(lmc->data->age, lmc->data->name);
+            // data_delete(target_node->data);
+            // target_node->data = data_new(lmc->data->age, lmc->data->name);
             // if (lmc->right != NULL) {
-                *target_replace = lmc->right;
+            *target_replace = lmc->right;
+            *target_pointer = lmc;
+            lmc->right = target_node->right;
+            lmc->left = target_node->left;
+            node_delete(target_node);
             // }
-            node_delete(lmc);
+            // node_delete(lmc);
             result = 1;
         }
         // Case 2: One child
