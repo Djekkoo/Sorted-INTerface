@@ -138,8 +138,8 @@ int handle_command(FILE *printFile, sortedcontainer *sc, char *command)
  * TO FIX:
  *   There are two separate problems in this function. Fix these problems
  *   by only changing TWO lines in total.
- *      -   
- *      -   
+ *      -   "inputAt += incr - 1;" => "inputAt = &input[inputMaxLength-incr-1];"
+ *      -   Changed opening bracket of the do-while loop into "{ if (input == NULL) return NULL; "
  */
 char *read_command(FILE *in)
 {
@@ -153,8 +153,8 @@ char *read_command(FILE *in)
     input = (char *)malloc(sizeof(char) * incr);
     inputAt = input;
     do
-    {
-        inputAt[incr - 1] = 'e';
+    {   if (input == NULL) return NULL; // allocation error, either at malloc or realloc. 
+        inputAt[incr - 1] = 'e'; // check if this gets overwritten @ inputAt[incr-1] != '\0'. If not, all input is read.
         if (fgets(inputAt, incr, in) == NULL)
             return NULL;
         if (inputAt[incr - 1] != '\0' || inputAt[incr - 2] == '\n')
@@ -163,10 +163,10 @@ char *read_command(FILE *in)
         }
         inputMaxLength += INPUT_INCREMENT;
         input = realloc(input, sizeof(char) * inputMaxLength);
-        inputAt += incr - 1;
+        inputAt = &input[inputMaxLength-INPUT_INCREMENT-1];
         incr = INPUT_INCREMENT + 1;
     } while (1);
-    input[strlen(input) - 1] = 0;
+    input[strlen(input) - 1] = 0; // remove newline before \0 from result.
     return input;
 }
 

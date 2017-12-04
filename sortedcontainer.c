@@ -33,6 +33,8 @@ node* node_new(data* d) {
     // Implement this (done?)
     node* n = (node*)malloc(sizeof(node));
     n->data = d;
+    n->left = NULL;
+    n->right = NULL;
     return n;
 }
 
@@ -79,7 +81,7 @@ int sortedcontainer_erase(sortedcontainer* sc, data* data) {
     sc->root = aux_root;
 
     node** parent_pointer = find_parent(&aux_root, data);
-    printf("%p", (void*)parent_pointer);
+    // printf("%p", (void*)parentf_pointer);
     if (parent_pointer != NULL) {
         node* parent_node = *parent_pointer;
         node** target_pointer;
@@ -157,7 +159,6 @@ int sortedcontainer_contains(sortedcontainer* sc, data* data) {
 }
 
 node** find_parent(node** n, data* data) {
-
     if (((*n)->left != NULL && data_compare((*n)->left->data, data) == 0) || ((*n)->right != NULL && data_compare((*n)->right->data, data) == 0)) {
         return n;
     }

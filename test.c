@@ -189,7 +189,7 @@ int test5(FILE* printFile) {
     sortedcontainer_insert(sc, mies);
     sortedcontainer_insert(sc, mies_l);
     sortedcontainer_insert(sc, mies_r);
-    sortedcontainer_print(sc, stdout);
+    // sortedcontainer_print(sc, stdout);
 
     ASSERT(sc != NULL, "failed to create sorted container");
     ASSERT(sc->root != NULL, "root is NULL");
@@ -205,7 +205,7 @@ int test5(FILE* printFile) {
     ASSERT(mies == sc->root->left->data, "data is not the same instant");
 
     sortedcontainer_erase(sc, aap);
-    sortedcontainer_print(sc, stdout);
+    // sortedcontainer_print(sc, stdout);
 
     ASSERT(!data_compare(noot_l, sc->root->data), "data is not equivalent");
     ASSERT(noot_l == sc->root->data, "data is not the same instant");
@@ -231,7 +231,7 @@ int test5(FILE* printFile) {
 
     sortedcontainer_delete(sc);
 
-    printf("%s", "done test5");
+    // printf("%s", "done test5");
 
     return 0;
 }
