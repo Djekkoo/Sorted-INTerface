@@ -36,7 +36,9 @@ data *read_data(char const *command)
     int age;
     char name[NAME_LENGTH];
     // Check parameter length
-    if (sscanf(command, "%*s %i %" STR(NAME_LENGTH) "s", &age, name) != 2) // cppcheck-error: NAME_LENGTH = 20, length of name(excluding \0) = 19
+    char scanf_format[12]; 
+    sprintf(scanf_format, "%%*s %%i %%%is", NAME_LENGTH-1);
+    if (sscanf(command, scanf_format, &age, name) != 2) // cppcheck-error: NAME_LENGTH = 20, length of name(excluding \0) = 19
     {
         fprintf(stdout, "Not enough arguments");
         return NULL;
@@ -52,6 +54,10 @@ data *read_data(char const *command)
 
         // Null terminate last bit
         name[NAME_LENGTH - 1] = '\0';
+    }
+    if (age < 0) {
+        fprintf(stdout, "Age cannot smaller than 0.");
+        return NULL;
     }
     return data_new(age, name);
 }
