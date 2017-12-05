@@ -66,8 +66,9 @@ data *read_data(char const *command)
  * TO FIX:
  *   There are three problems in this function, two of which are related
  *       - fprintf(printFile, command) => fprintf(printFile, "%s", command)
- *       -  
- *       - 
+ *       - free data after call to sortercontainer_erase
+ *       - free data after call to sortedcontainer_contains
+ * todo ownership should not be claimed by contains/erase. Free memory afterwards       
  */
 int handle_command(FILE *printFile, sortedcontainer *sc, char *command)
 {
@@ -89,6 +90,7 @@ int handle_command(FILE *printFile, sortedcontainer *sc, char *command)
         if (rd != NULL)
         {
             sortedcontainer_erase(sc, rd);
+            data_delete(rd);
         }
         break;
     }
@@ -106,6 +108,7 @@ int handle_command(FILE *printFile, sortedcontainer *sc, char *command)
             {
                 fprintf(printFile, "n\n");
             }
+            data_delete(rd);
         }
 
         break;
@@ -194,7 +197,6 @@ int main(int argc, char *argv[])
         char *command = read_command(stdin);
         if (command == NULL)
         {
-            free(command);
             break;
         }
 
