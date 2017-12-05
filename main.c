@@ -36,7 +36,7 @@ data *read_data(char const *command)
     int age;
     char name[NAME_LENGTH];
     // Check parameter length
-    if (sscanf(command, "%*s %i %" STR(NAME_LENGTH) "s", &age, name) != 2)
+    if (sscanf(command, "%*s %i %" STR(NAME_LENGTH) "s", &age, name) != 2) // cppcheck-error: NAME_LENGTH = 20, length of name(excluding \0) = 19
     {
         fprintf(stdout, "Not enough arguments");
         return NULL;
@@ -178,7 +178,7 @@ char *read_command(FILE *in)
  *
  * TO FIX:
  *   One issue needs to be fixed here.
- *      -   
+ *      -   free the memory allocated for the read_command result buffer.
  */
 int main(int argc, char *argv[])
 {
@@ -194,13 +194,16 @@ int main(int argc, char *argv[])
         char *command = read_command(stdin);
         if (command == NULL)
         {
+            free(command);
             break;
         }
 
         if (handle_command(stdout, sc, command))
         {
+            free(command);
             break;
         }
+        free(command);        
     }
 
     sortedcontainer_delete(sc);
