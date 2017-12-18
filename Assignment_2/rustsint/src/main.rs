@@ -1,4 +1,7 @@
+mod sortedcontainer;
+
 use std::io::{self, Write};
+use sortedcontainer::{SortedContainer, Data};
 
 #[derive(Debug)]
 enum Command {
@@ -43,8 +46,20 @@ fn parse_command(input: String) -> Command {
 
 fn main() {
 
+    let mut sc : SortedContainer = SortedContainer::new();
+    // sc.insert(Data::new(1, "jacco".to_lowercase()));
+    // sc.insert(Data::new(3, "jacco".to_lowercase()));
+    // println!("{}", sc.contains(&Data::new(1, "jacco".to_lowercase())));
+    // println!("{}", sc.contains(&Data::new(2, "jacco".to_lowercase())));
+    // println!("{}", sc.contains(&Data::new(3, "jacco".to_lowercase())));
+
+    // println!("{}", sc.contains(&Data::new(1, "jacco2".to_lowercase())));
+    // sortedcontainer::set_root(sc);
+
     loop {
         let mut input = String::new();
+
+        // sortedcontainer::print_node(sc.root);
 
         print!("> ");
         io::stdout().flush().unwrap();
@@ -52,14 +67,18 @@ fn main() {
             Ok(_) => {
                 match parse_command(input) {
                     Command::Insert{age, name} => {
-                        unimplemented!();
+                        sc.insert(Data::new(age, name));
                     },
                     Command::Erase{age, name} => {
                         unimplemented!();
                     },
                     Command::Contains{age, name} => {
-                        unimplemented!();
-                                        }
+                        if sc.contains(&Data::new(age, name)) {
+                            println!("Found!");
+                        } else {
+                            println!("You should look somewhere else!");
+                        }
+                    }
                     Command::Print => {
                         unimplemented!();
                     },
