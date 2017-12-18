@@ -1,5 +1,5 @@
 
-Home • About • Archive
+Ho'me • About • Archive
 How do I convert a &str to a String in Rust?
 
 This is the first in a whole series of blog posts to answer the simple question “How do I X in Rust?” Many times as a user coming into the Rust language there are growing pains and some things that seem intuitive after using the language for a while aren’t for a new user. This is aimed at those new users, however even an experienced Rust user might learn a new trick or two.
