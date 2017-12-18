@@ -80,7 +80,8 @@ fn main() {
                         }
                     }
                     Command::Print => {
-                        unimplemented!();
+                        sc.print();
+                        // unimplemented!();
                     },
                     Command::Exit => {
                         println!("Exiting...");
