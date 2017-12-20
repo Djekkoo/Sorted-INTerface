@@ -112,21 +112,25 @@ impl Node {
     pub fn erase(&mut self, ref data: &Data) {
 
     }
-
+	
 	pub fn print_children(&self, indent: String) {
 		match self.left {
 			Some(ref node) => {
 				println!("{}{}", indent, node.data);
 				node.print_children(format!("{} ", indent));
 			}
-			None => {}
+			None => {
+                println!("{}()", indent);
+            }
 		}
 		match self.right {
 			Some(ref node) => {
 				println!("{}{}", indent, node.data);
 				node.print_children(format!("{} ", indent));
 			}
-			None => {}
+			None => {
+                println!("{}()", indent);
+            }
 		}
     }
 }
