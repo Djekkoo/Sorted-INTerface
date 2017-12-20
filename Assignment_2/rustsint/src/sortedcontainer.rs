@@ -219,22 +219,26 @@ impl Node {
             },
         }
     }
-
-    pub fn print_children(&self, indent: String) {
-        match self.left {
-            Some(ref node) => {
-                println!("{}{}", indent, node.data);
-                node.print_children(format!("{} ", indent));
+	
+	pub fn print_children(&self, indent: String) {
+		match self.left {
+			Some(ref node) => {
+				println!("{}{}", indent, node.data);
+				node.print_children(format!("{} ", indent));
+			}
+			None => {
+                println!("{}()", indent);
             }
-            None => {}
-        }
-        match self.right {
-            Some(ref node) => {
-                println!("{}{}", indent, node.data);
-                node.print_children(format!("{} ", indent));
+		}
+		match self.right {
+			Some(ref node) => {
+				println!("{}{}", indent, node.data);
+				node.print_children(format!("{} ", indent));
+			}
+			None => {
+                println!("{}()", indent);
             }
-            None => {}
-        }
+		}
     }
 }
 
