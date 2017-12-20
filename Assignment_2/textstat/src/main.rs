@@ -11,7 +11,7 @@ use regex::Regex;
 
 fn help() {
     println!(
-        "usage:
+        "Usage:
 textstat <file.txt>
     Analyse file.txt"
     );
@@ -84,7 +84,7 @@ fn analyze(text: String) {
                 println!("{}: {}", word, count);
             }
         }
-        None => { println!("No words found! So no average, occurences and top 10 list."); }
+        None => { panic!("No words found! So no average, occurences and top 10 list."); }
     }
     
 }
@@ -95,7 +95,7 @@ fn main() {
     match args.len() {
         // no arguments passed
         1 => {
-            println!("My name is 'textstat'. Try passing some arguments!");
+            println!("My name is 'textstat'. Provide a textfile as argument!");
         }
         // one argument passed
         2 => {
