@@ -70,7 +70,7 @@ fn main() {
                         sc.insert(Data::new(age, name));
                     },
                     Command::Erase{age, name} => {
-                        unimplemented!();
+                        sc.erase(&Data::new(age, name));
                     },
                     Command::Contains{age, name} => {
                         if sc.contains(&Data::new(age, name)) {

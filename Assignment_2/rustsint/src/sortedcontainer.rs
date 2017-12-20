@@ -109,6 +109,10 @@ impl Node {
         }
     }
 
+    pub fn erase(&mut self, ref data: &Data) {
+
+    }
+
 	pub fn print_children(&self, indent: String) {
 		match self.left {
 			Some(ref node) => {
@@ -164,6 +168,53 @@ impl SortedContainer {
             Some(ref root) => {
                 println!("{}", root.data);
                 root.print_children(" ".to_string());
+            }
+        }
+    }
+
+    pub fn erase(&mut self, ref data: &Data) {
+        match self.root {
+            None => {
+                println!("Empty SortedContainer");
+                return
+            }
+            Some( mut root) => {
+                // create auxillary root
+                let mut aux : Node = Node::new(Data::new(0, "auxillary root".to_string()));
+                self.root = Some(Box::new(aux));
+                match aux.data.compare(&root.data) {
+                    Ordering::Equal => {
+                        // auxillary root already exists => create a new one.
+                        self.root = Some(Box::new(Node::new(Data::new(-1000, "auxillary root".to_string()))));
+                        aux.left = Some(root);
+                    },
+                    Ordering::Greater => {
+                        aux.left = Some(root);
+                    },
+                    Ordering::Less => {
+                        aux.right = Some(root);
+                    }
+                }
+
+                // delete data
+                aux.erase(&data);
+
+                // remove auxillary root
+                match (aux.left, aux.right) {
+                    (None, None) => {
+                        self.root = None;
+                    }
+                    (Some(l), None) => {
+                        self.root = Some(l);
+                    }
+                    (None, Some(r)) => {
+                        self.root = Some(r);
+                    }
+                    (Some(l), Some(r)) => {
+                        println!("Something went wrong: auxillary root has 2 children");
+                    }
+                }
+                
             }
         }
     }
