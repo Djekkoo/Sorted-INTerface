@@ -1,4 +1,4 @@
-CFLAGS=-std=c99 -Wall -Werror -pedantic -Wextra -g -O0
+CFLAGS=-std=c99 -Wall -Werror -pedantic -Wextra -g -O0 -m32
 OBJ=sortedcontainer.o \
     main.o \
 	test.o
@@ -37,4 +37,4 @@ ok: $(OBJOK)
 	$(CC) $^ $(CFLAGS) -o sint_ok -lm
 
 sint_afl: $(OBJ)
-	afl-gcc $^ $(CFLAGS) -o sint_afl -lm
+	afl-gcc $^ $(CFLAGS) -o sint_afl -lm --disable-shared 	

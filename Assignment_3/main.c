@@ -175,6 +175,7 @@ char *read_command(FILE *in)
         inputAt = &input[inputMaxLength-INPUT_INCREMENT-1];
         incr = INPUT_INCREMENT + 1;
     } while (1);
+    if (strlen(input) == 0) return NULL;
     input[strlen(input) - 1] = 0; // remove newline before \0 from result.
     return input;
 }
