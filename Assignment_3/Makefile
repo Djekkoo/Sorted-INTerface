@@ -1,4 +1,4 @@
-CFLAGS=-std=c99 -Wall -Werror -pedantic -Wextra -g -O0 -m32
+CFLAGS=-std=c99 -Wall -Werror -pedantic -Wextra -g -O0
 OBJ=sortedcontainer.o \
     main.o \
 	test.o

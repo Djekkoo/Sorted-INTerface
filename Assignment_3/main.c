@@ -37,7 +37,7 @@ data *read_data(char const *command)
     char name[NAME_LENGTH];
     // Check parameter length
     char scanf_format[12]; 
-    sprintf(scanf_format, "%%*s %%i %%%is", NAME_LENGTH-1);
+    sprintf(scanf_format, "%%*s %%i %%%is", NAME_LENGTH);
     if (sscanf(command, scanf_format, &age, name) != 2) // cppcheck-error: NAME_LENGTH = 20, length of name(excluding \0) = 19
     {
         fprintf(stdout, "Not enough arguments");
@@ -52,14 +52,19 @@ data *read_data(char const *command)
         //     return NULL;
         // }
 
-        // Null terminate last bit
-        name[NAME_LENGTH - 1] = '\0';
-    }
-    if (age < 0) {
-        fprintf(stdout, "Age cannot smaller than 0.");
+        for (int i = 0; i < NAME_LENGTH; i++) {
+            if(name[i] == '\0') {
+                 if (age < 0) {
+                    fprintf(stdout, "Age cannot smaller than 0.");
+                    return NULL;
+                }
+                return data_new(age, name);
+            }
+        }
+        fprintf(stdout, "Name too long");
         return NULL;
     }
-    return data_new(age, name);
+   
 }
 
 /**
@@ -164,8 +169,10 @@ char *read_command(FILE *in)
     do
     {   if (input == NULL) return NULL; // allocation error, either at malloc or realloc. 
         inputAt[incr - 1] = 'e'; // check if this gets overwritten @ inputAt[incr-1] != '\0'. If not, all input is read.
-        if (fgets(inputAt, incr, in) == NULL)
+        if (fgets(inputAt, incr, in) == NULL) {
+            free(input);
             return NULL;
+        }
         if (inputAt[incr - 1] != '\0' || inputAt[incr - 2] == '\n')
         {
             break;
@@ -175,7 +182,10 @@ char *read_command(FILE *in)
         inputAt = &input[inputMaxLength-INPUT_INCREMENT-1];
         incr = INPUT_INCREMENT + 1;
     } while (1);
-    if (strlen(input) == 0) return NULL;
+    if (strlen(input) == 0) {
+        free(input);
+        return NULL;
+    }
     input[strlen(input) - 1] = 0; // remove newline before \0 from result.
     return input;
 }
